@@ -22,7 +22,11 @@
     const { meta, notices } = Store.data;
     const todayISO = Store.todayISO();
     const todayEvents = Store.eventsByDate()[todayISO] || [];
-    const upcoming = Store.upcomingEvents(5);
+    // 今天的日程上面已经单独列过，这里不要重复出现
+    const todayIds = new Set(todayEvents.map((ev) => ev.id));
+    const upcoming = Store.upcomingEvents(8)
+      .filter((ev) => !todayIds.has(ev.id))
+      .slice(0, 5);
     const stamp = meta.updatedAt ? new Date(meta.updatedAt) : null;
     const stampText = stamp && !isNaN(stamp)
       ? `${stamp.getFullYear()}-${UI.pad(stamp.getMonth() + 1)}-${UI.pad(stamp.getDate())}`
