@@ -122,12 +122,37 @@ const UI = (() => {
     { href: 'index.html', label: '首页' },
     { href: 'calendar.html', label: '日程' }
   ];
+  const ADMIN_KEY = 'class-site.admin';
+  let currentPage = 'index.html';
 
-  function renderHeader(current) {
-    const slot = document.querySelector('[data-header]');
-    if (!slot) return;
+  /**
+   * 管理入口是否可见。
+   * 普通访客看不到，免得对着「令牌」「分支」发懵；
+   * 配过令牌的人自动可见，班委也可以打开一次带 ?admin 的链接来解锁（之后长期有效）。
+   */
+  function adminUnlocked() {
+    if (Publisher.isConfigured()) return true;
+
+    try {
+      const url = new URL(location.href);
+      if (url.searchParams.has('admin') || url.hash === '#admin') {
+        localStorage.setItem(ADMIN_KEY, 'on');
+        url.searchParams.delete('admin');
+        url.hash = '';
+        history.replaceState(null, '', url.pathname + url.search);
+        return true;
+      }
+    } catch { /* 环境不支持 URL API 时忽略 */ }
+
+    return localStorage.getItem(ADMIN_KEY) === 'on';
+  }
+
+  function renderHeader(page) {
+    if (page) currentPage = page;
+    const host = document.querySelector('[data-header]') || document.querySelector('header.site-header');
+    if (!host) return;
     const meta = Store.data.meta;
-    slot.outerHTML = `
+    host.outerHTML = `
       <header class="site-header">
         <div class="wrap">
           <a class="brand" href="index.html">
@@ -138,31 +163,31 @@ const UI = (() => {
             </span>
           </a>
           <nav class="nav">
-            ${NAV.map((n) => `<a href="${n.href}"${n.href === current ? ' aria-current="page"' : ''}>${n.label}</a>`).join('')}
+            ${NAV.map((n) => `<a href="${n.href}"${n.href === currentPage ? ' aria-current="page"' : ''}>${n.label}</a>`).join('')}
           </nav>
           <div class="header-tools">
             <button class="btn btn-icon btn-ghost" data-theme-toggle title="切换深浅色" aria-label="切换深浅色">
-              <span data-theme-icon>🌙</span>
+              <span data-theme-icon>${Store.getTheme() === 'dark' ? '☀️' : '🌙'}</span>
             </button>
-            <button class="btn btn-sm" data-admin-open title="数据管理">管理</button>
+            ${adminUnlocked() ? '<button class="btn btn-sm" data-admin-open title="数据管理">管理</button>' : ''}
           </div>
         </div>
       </header>`;
   }
 
   function renderFooter() {
-    const slot = document.querySelector('[data-footer]');
-    if (!slot) return;
+    const host = document.querySelector('[data-footer]') || document.querySelector('footer.site-footer');
+    if (!host) return;
     const meta = Store.data.meta;
     const stamp = meta.updatedAt ? new Date(meta.updatedAt) : null;
     const stampText = stamp && !isNaN(stamp)
       ? `${stamp.getFullYear()}-${pad(stamp.getMonth() + 1)}-${pad(stamp.getDate())} ${pad(stamp.getHours())}:${pad(stamp.getMinutes())}`
       : '—';
-    slot.outerHTML = `
+    host.outerHTML = `
       <footer class="site-footer">
         <div class="wrap">
           <span>${esc(meta.className)} · 数据更新于 ${stampText}</span>
-          <span>由 GitHub Pages 托管 · <a href="#" data-admin-open>数据管理</a></span>
+          <span>由 GitHub Pages 托管${adminUnlocked() ? ' · <a href="#" data-admin-open>数据管理</a>' : ''}</span>
         </div>
       </footer>`;
   }
@@ -256,6 +281,8 @@ const UI = (() => {
             Publisher.saveConfig(values);
             toast('已保存，现在可以发布了', 'ok');
             close();
+            renderHeader();
+            renderFooter();
             openAdminPanel();
           });
         }
@@ -399,8 +426,12 @@ const UI = (() => {
               });
               if (!ok) return;
               Publisher.forget();
+              // 别把管理入口一起锁死，留着下次还能进来
+              localStorage.setItem(ADMIN_KEY, 'on');
               toast('已清除在线发布配置', 'ok');
               close();
+              renderHeader();
+              renderFooter();
             });
           }
 
@@ -473,11 +504,11 @@ const UI = (() => {
   }
 
   /* ---------- 初始化 ---------- */
-  function initShell(currentPage) {
+  function initShell(page) {
     document.documentElement.dataset.theme = Store.getTheme();
     Store.applyEditMode();
 
-    renderHeader(currentPage);
+    renderHeader(page);
     renderFooter();
     renderDraftBar();
 
@@ -501,6 +532,6 @@ const UI = (() => {
   return {
     esc, toast, openModal, confirmDialog,
     pad, iso, fmtDate, fmtDateFull, relDay, weekdayOf,
-    initShell, openAdminPanel, renderFooter, renderDraftBar
+    initShell, openAdminPanel, renderFooter, renderDraftBar, adminUnlocked
   };
 })();
