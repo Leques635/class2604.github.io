@@ -3,141 +3,20 @@
     "version": 1,
     "className": "计科2604",
     "slogan": "把日程理清楚，把日子过明白。",
-    "updatedAt": "2026-09-09T08:00:00.000Z"
+    "updatedAt": "2026-09-09T04:51:54.274Z"
   },
   "events": [
     {
-      "id": "ev-military",
-      "title": "军训动员大会",
-      "date": "2026-09-10",
-      "endDate": "",
-      "time": "08:00",
-      "endTime": "11:00",
-      "category": "活动",
-      "location": "田径场",
-      "note": "穿迷彩服，提前 15 分钟集合。"
-    },
-    {
-      "id": "ev-course-select",
-      "title": "选课系统关闭",
-      "date": "2026-09-12",
-      "endDate": "",
+      "id": "ev-mttmfzfm1ol30",
+      "title": "麻腮风疫苗接种",
+      "date": "2026-09-09",
+      "endDate": "2026-09-11",
       "time": "",
       "endTime": "",
       "category": "其他",
-      "location": "",
-      "note": "还没确认选课的同学尽快登录教务系统核对，有问题找学习委员。"
-    },
-    {
-      "id": "ev-orientation",
-      "title": "新生入学教育",
-      "date": "2026-09-15",
-      "endDate": "",
-      "time": "14:00",
-      "endTime": "16:00",
-      "category": "活动",
-      "location": "报告厅",
-      "note": ""
-    },
-    {
-      "id": "ev-clubs",
-      "title": "社团招新",
-      "date": "2026-09-18",
-      "endDate": "",
-      "time": "10:00",
-      "endTime": "17:00",
-      "category": "活动",
-      "location": "中心广场",
-      "note": "想加社团的同学记得去逛一圈。"
-    },
-    {
-      "id": "ev-first-classmeeting",
-      "title": "第一次班会",
-      "date": "2026-09-25",
-      "endDate": "",
-      "time": "16:00",
-      "endTime": "17:00",
-      "category": "班会",
-      "location": "教三楼 412",
-      "note": "选举班委，讨论班级公约。"
-    },
-    {
-      "id": "ev-nationalday",
-      "title": "国庆假期",
-      "date": "2026-10-01",
-      "endDate": "2026-10-07",
-      "time": "",
-      "endTime": "",
-      "category": "假期",
-      "location": "",
-      "note": "10 月 8 日正常上课，注意返校时间。"
-    },
-    {
-      "id": "ev-midexam",
-      "title": "期中考试",
-      "date": "2026-10-20",
-      "endDate": "2026-10-21",
-      "time": "08:00",
-      "endTime": "17:00",
-      "category": "考试",
-      "location": "教学楼",
-      "note": "具体场次和考场见教务系统通知。"
-    },
-    {
-      "id": "ev-acm",
-      "title": "程序设计竞赛报名截止",
-      "date": "2026-11-06",
-      "endDate": "",
-      "time": "",
-      "endTime": "",
-      "category": "其他",
-      "location": "",
-      "note": "三人一队，找班长登记。"
-    },
-    {
-      "id": "ev-cet4",
-      "title": "英语四级考试",
-      "date": "2026-12-19",
-      "endDate": "",
-      "time": "09:00",
-      "endTime": "11:20",
-      "category": "考试",
-      "location": "教学楼",
-      "note": "提前打印准考证，带好身份证和学生证。"
-    },
-    {
-      "id": "ev-newyear",
-      "title": "元旦晚会",
-      "date": "2026-12-31",
-      "endDate": "",
-      "time": "18:30",
-      "endTime": "21:00",
-      "category": "活动",
-      "location": "礼堂",
-      "note": ""
+      "location": "体育馆多功能厅4号门",
+      "note": "每日8:30-11:30；13:30-16:00,带好身份证，北京籍同学不再接种范围内"
     }
   ],
-  "notices": [
-    {
-      "id": "nt-course",
-      "title": "选课与退课提醒",
-      "body": "选课系统 9 月 12 日 24:00 关闭。还没确认的同学尽快登录教务系统核对课表，尤其是必修课和体育课。有问题在群里问学习委员。",
-      "date": "2026-09-08",
-      "pinned": true
-    },
-    {
-      "id": "nt-contact",
-      "title": "班级群与联系方式",
-      "body": "班级 QQ 群：123456789\n班长 张明：138-0000-0000\n学习委员 李华：139-0000-0000\n日常通知看群消息，急事直接打电话。",
-      "date": "2026-09-07",
-      "pinned": false
-    },
-    {
-      "id": "nt-committee",
-      "title": "班委招募",
-      "body": "需要班长、学习委员、生活委员、体育委员各一名。想担任的同学 9 月 20 日前找辅导员报名，班会上投票选举。",
-      "date": "2026-09-06",
-      "pinned": false
-    }
-  ]
+  "notices": []
 }
