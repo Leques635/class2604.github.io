@@ -216,7 +216,10 @@
   /* ---------- 事件绑定 ---------- */
   document.addEventListener('click', (e) => {
     const notice = e.target.closest('[data-notice]');
-    if (notice) { openNoticeEditor(notice.dataset.notice); return; }
+    if (notice) {
+      if (Store.isEditMode()) openNoticeEditor(notice.dataset.notice);
+      return;
+    }
     if (e.target.closest('[data-new-notice]')) { openNoticeEditor(null); }
   });
 
