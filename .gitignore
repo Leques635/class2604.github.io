@@ -1,0 +1,15 @@
+# ===== 千万不要提交到仓库的东西 =====
+# 访问令牌写进公开仓库 = 等于把仓库的写权限送人
+令牌.txt
+*.token
+*.pat
+token.txt
+
+# ===== 系统 / 编辑器杂物 =====
+.DS_Store
+Thumbs.db
+desktop.ini
+node_modules/
+.vscode/
+.idea/
+*.log
