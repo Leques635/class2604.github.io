@@ -224,11 +224,12 @@
        ${ev.note ? `<p style="color:var(--text-dim);white-space:pre-wrap">${UI.esc(ev.note)}</p>` : ''}
        <div class="modal-actions">
          <button class="btn" data-close>关闭</button>
-         <button class="btn btn-primary" data-edit-this>编辑</button>
+         ${UI.adminUnlocked() ? '<button class="btn btn-primary" data-edit-this>编辑</button>' : ''}
        </div>`,
       {
         onMount(box, close) {
-          box.querySelector('[data-edit-this]').addEventListener('click', () => {
+          const editBtn = box.querySelector('[data-edit-this]');
+          if (editBtn) editBtn.addEventListener('click', () => {
             close();
             if (!Store.isEditMode()) { Store.setEditMode(true); UI.toast('已自动打开编辑模式', 'ok'); }
             openEditor(evId);
@@ -238,13 +239,46 @@
     );
   }
 
+  /* ---------- 访客视角：看某一天有什么安排 ---------- */
+  function showDay(date) {
+    const list = Store.eventsByDate()[date] || [];
+    UI.openModal(
+      `<div class="modal-head">
+         <h3>${UI.esc(UI.fmtDateFull(date))} ${UI.esc(UI.weekdayOf(date))}</h3>
+         <div class="spacer"></div>
+         <button class="btn btn-sm btn-ghost" data-close>关闭</button>
+       </div>
+       ${list.length
+         ? `<ul class="ev-list">${list.map((ev) => `
+             <li class="ev-item" style="--c:${catColor(ev.category)}">
+               <div class="ev-body">
+                 <div class="ev-title">${UI.esc(ev.title)}</div>
+                 <div class="ev-meta">
+                   <span class="badge" style="background:color-mix(in srgb,${catColor(ev.category)} 16%,transparent);color:color-mix(in srgb,${catColor(ev.category)} 78%,var(--text))">${UI.esc(ev.category)}</span>
+                   ${ev.time ? `<span>🕘 ${UI.esc(ev.time)}${ev.endTime ? '–' + UI.esc(ev.endTime) : ''}</span>` : ''}
+                   ${ev.location ? `<span>📍 ${UI.esc(ev.location)}</span>` : ''}
+                 </div>
+                 ${ev.note ? `<div class="ev-note">${UI.esc(ev.note)}</div>` : ''}
+               </div>
+             </li>`).join('')}</ul>`
+         : '<div class="empty">这天没有安排。</div>'}
+       <div class="modal-actions">
+         <button class="btn" data-close>关闭</button>
+       </div>`
+    );
+  }
+
   /* ---------- 事件绑定 ---------- */
   document.addEventListener('click', (e) => {
     const evBtn = e.target.closest('[data-ev]');
     if (evBtn) { e.stopPropagation(); openEditor(evBtn.dataset.ev); return; }
 
     const dayCell = e.target.closest('.cal-day');
-    if (dayCell) { openEditor(null, dayCell.dataset.date); return; }
+    if (dayCell) {
+      if (Store.isEditMode()) openEditor(null, dayCell.dataset.date);
+      else showDay(dayCell.dataset.date);
+      return;
+    }
 
     if (e.target.closest('[data-nav-prev]')) { shiftMonth(-1); return; }
     if (e.target.closest('[data-nav-next]')) { shiftMonth(1); return; }
@@ -265,6 +299,9 @@
   (async () => {
     await Store.load();
     UI.initShell('calendar.html');
+    // 普通访客不显示「新建日程」
+    const newBtn = document.querySelector('[data-new-event]');
+    if (newBtn && !UI.adminUnlocked()) newBtn.hidden = true;
     render();
     Store.onChange(render);
   })();
