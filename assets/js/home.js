@@ -39,7 +39,7 @@
         <p class="lead">${UI.esc(meta.slogan || '班级日程与公告，都在这一页。')}</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="calendar.html">日程日历</a>
-          <button class="btn btn-ghost no-print" data-admin-open>数据管理</button>
+          ${UI.adminUnlocked() ? '<button class="btn btn-ghost no-print" data-admin-open>数据管理</button>' : ''}
         </div>
       </div>`;
 
